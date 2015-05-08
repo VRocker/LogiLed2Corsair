@@ -142,3 +142,12 @@ void USBHelper::SendData(HANDLE device, unsigned char* dataPkt)
 	DWORD written = 0;
 	WriteFile(device, usbPkt, 65, &written, 0);
 }
+
+void USBHelper::SendMData(HANDLE device, unsigned char* dataPkt)
+{
+	unsigned char usbPkt[65] = { 0 };
+	for (unsigned int i = 1; i < 65; ++i)
+		usbPkt[i] = dataPkt[i - 1];
+
+	HidD_SetFeature(device, usbPkt, 65);
+}

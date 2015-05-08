@@ -12,7 +12,8 @@
 
 #include "Logger.h"
 
-#include "../LibCorsairRGB/main.h"
+#include "../LibCorsairRGB/Keyboard.h"
+#include "../LibCorsairRGB/Mouse.h"
 
 CorsairRGB::Keys g_CorsairKeyFromLogi[144] = { CorsairRGB::Keys::missing };
 
@@ -153,9 +154,10 @@ void InitCorsairToLogiMap()
 
 void cleanup()
 {
-	CorsairRGB::RestoreLighting();
+	CorsairRGB::Keyboard::RestoreLighting();
 
-	CorsairRGB::Shutdown();
+	CorsairRGB::Keyboard::Shutdown();
+	CorsairRGB::Mouse::Shutdown();
 
 	CLogger::EndLogging();
 }
@@ -196,13 +198,20 @@ bool LogiLedInit()
 {
 	CLogger::OutputLog_s("Logitech LED init called.", LogLevel::Information);
 
-	CorsairRGB::Init();
+	CorsairRGB::Keyboard::Init();
+	CorsairRGB::Mouse::Init();
 
 	// Make sure we start off with a blank canvas
 	for (unsigned char key = 0; key < 144; key++) {
-		CorsairRGB::SetKey((CorsairRGB::Keys)key, 0, 0, 0);
+		CorsairRGB::Keyboard::SetKey((CorsairRGB::Keys)key, 0, 0, 0);
 	}
-	CorsairRGB::FlushLightBuffer();
+
+	for (unsigned char key = 0; key < 4; key++) {
+		CorsairRGB::Mouse::SetLight((CorsairRGB::Mouse::LightIDs)key, 0, 0, 0);
+	}
+
+	CorsairRGB::Keyboard::FlushLightBuffer();
+	CorsairRGB::Mouse::FlushLightBuffer();
 
 	return true;
 }
@@ -223,7 +232,7 @@ bool LogiLedRestoreLighting(int deviceType)
 {
 	CLogger::OutputLog("LogiLedRestoreLighting called (%i)", LogLevel::Information, deviceType);
 
-	CorsairRGB::RestoreLighting();
+	CorsairRGB::Keyboard::RestoreLighting();
 	return true;
 }
 
@@ -253,10 +262,18 @@ bool LogiLedSetLightingFromBitmap(char bitmap [])
 
 	for (unsigned int i = 0; i < LOGI_LED_BITMAP_WIDTH * LOGI_LED_BITMAP_HEIGHT; ++i)
 	{
-		CorsairRGB::SetKey(g_CorsairKeyFromLogi[i], bitmap[(i * LOGI_LED_BITMAP_BYTES_PER_KEY)], bitmap[(i * LOGI_LED_BITMAP_BYTES_PER_KEY) + 1], bitmap[(i * LOGI_LED_BITMAP_BYTES_PER_KEY) + 2]);
+		CorsairRGB::Keyboard::SetKey(g_CorsairKeyFromLogi[i], bitmap[(i * LOGI_LED_BITMAP_BYTES_PER_KEY)], bitmap[(i * LOGI_LED_BITMAP_BYTES_PER_KEY) + 1], bitmap[(i * LOGI_LED_BITMAP_BYTES_PER_KEY) + 2]);
 	}
 
-	CorsairRGB::FlushLightBuffer();
+	// Set the top light to the character colour
+	CorsairRGB::Mouse::SetLight(CorsairRGB::Mouse::LightIDs::Top, bitmap[(0 * LOGI_LED_BITMAP_BYTES_PER_KEY)], bitmap[(0 * LOGI_LED_BITMAP_BYTES_PER_KEY) + 1], bitmap[(0 * LOGI_LED_BITMAP_BYTES_PER_KEY) + 2]);
+	// Set the front light to the F1 colour
+	CorsairRGB::Mouse::SetLight(CorsairRGB::Mouse::LightIDs::Front, bitmap[(1 * LOGI_LED_BITMAP_BYTES_PER_KEY)], bitmap[(1 * LOGI_LED_BITMAP_BYTES_PER_KEY) + 1], bitmap[(1 * LOGI_LED_BITMAP_BYTES_PER_KEY) + 2]);
+	// Set the back light to the F7 colour
+	CorsairRGB::Mouse::SetLight(CorsairRGB::Mouse::LightIDs::Back, bitmap[(7 * LOGI_LED_BITMAP_BYTES_PER_KEY)], bitmap[(7 * LOGI_LED_BITMAP_BYTES_PER_KEY) + 1], bitmap[(7 * LOGI_LED_BITMAP_BYTES_PER_KEY) + 2]);
+
+	CorsairRGB::Keyboard::FlushLightBuffer();
+	CorsairRGB::Mouse::FlushLightBuffer();
 
 	return true;
 }
