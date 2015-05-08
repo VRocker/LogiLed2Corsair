@@ -1,0 +1,17 @@
+LIBRARY LogiLed2Corsair.dll
+
+EXPORTS
+	
+	LogiLedInit
+	LogiLedSaveCurrentLighting
+	LogiLedSetLighting
+	LogiLedRestoreLighting
+	LogiLedFlashLighting
+	LogiLedPulseLighting
+	LogiLedSetLightingFromBitmap
+	LogiLedSetLightingForKeyWithScanCode
+	LogiLedSetLightingForKeyWithHidCode
+	LogiLedSetLightingForKeyWithQuartzCode
+	LogiLedSetLightingForKeyWithKeyName
+	LogiLedStopEffects
+	LogiLedShutdown
