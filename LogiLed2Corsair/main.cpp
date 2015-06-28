@@ -17,6 +17,8 @@
 
 CorsairRGB::Keys g_CorsairKeyFromLogi[144] = { CorsairRGB::Keys::missing };
 
+static bool g_hasInitialised = false;
+
 void InitCorsairToLogiMap()
 {
 	g_CorsairKeyFromLogi[0] = CorsairRGB::Keys::escape;
@@ -178,7 +180,7 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD fdwReason, LPVOID)
 
 		InitCorsairToLogiMap();
 
-		
+
 	}
 	break;
 
@@ -213,24 +215,66 @@ bool LogiLedInit()
 	CorsairRGB::Keyboard::FlushLightBuffer();
 	CorsairRGB::Mouse::FlushLightBuffer();
 
+	g_hasInitialised = true;
+
 	return true;
 }
 
-bool LogiLedSaveCurrentLighting(int deviceType)
+bool LogiLedGetSdkVersion(int *majorNum, int *minorNum, int *buildNum)
 {
-	CLogger::OutputLog("LogiLedSaveCurrentLighting called (%i)", LogLevel::Information, deviceType);
+	CLogger::OutputLog("LogiLedGetSdkVersion called.", LogLevel::Information);
+
+	// Mimic the SDK version
+	*majorNum = 8;
+	*minorNum = 58;
+	*buildNum = 183;
+
 	return true;
 }
 
-bool LogiLedSetLighting(int deviceType, int redPercentage, int greenPercentage, int bluePercentage)
+bool LogiLedSetTargetDevice(int targetDevice)
 {
-	CLogger::OutputLog("LogiLedSetLighting called (%i - %i %i %i)", LogLevel::Information, deviceType, redPercentage, greenPercentage, bluePercentage);
+	CLogger::OutputLog("LogiLedSetTargetDevice called (%i)", LogLevel::Information, targetDevice);
+
+	// Logitech SDK says this function returns false if LogiLedInit hasn't been called
+	return g_hasInitialised;
+}
+
+bool LogiLedSaveCurrentLighting()
+{
+	CLogger::OutputLog("LogiLedSaveCurrentLighting called (%i)", LogLevel::Information);
 	return true;
 }
 
-bool LogiLedRestoreLighting(int deviceType)
+bool LogiLedSetLighting(int redPercentage, int greenPercentage, int bluePercentage)
 {
-	CLogger::OutputLog("LogiLedRestoreLighting called (%i)", LogLevel::Information, deviceType);
+	// Commented because this spams
+	//CLogger::OutputLog("LogiLedSetLighting called (%i %i %i)", LogLevel::Information, redPercentage, greenPercentage, bluePercentage);
+
+	unsigned char redValue = (float)(redPercentage / 100.0f) * 255;
+	unsigned char greenValue = (float)(greenPercentage / 100.0f) * 255;
+	unsigned char blueValue = (float)(bluePercentage / 100.0f) * 255;
+
+	for (unsigned char key = 0; key < 144; key++)
+	{
+		CorsairRGB::Keyboard::SetKey((CorsairRGB::Keys)key, redValue, greenValue, blueValue);
+	}
+
+
+	for (unsigned char key = 0; key < 4; key++)
+	{
+		CorsairRGB::Mouse::SetLight((CorsairRGB::Mouse::LightIDs)key, redValue, greenValue, blueValue);
+	}
+
+	CorsairRGB::Keyboard::FlushLightBuffer();
+	CorsairRGB::Mouse::FlushLightBuffer();
+
+	return true;
+}
+
+bool LogiLedRestoreLighting()
+{
+	CLogger::OutputLog("LogiLedRestoreLighting called", LogLevel::Information);
 
 	CorsairRGB::Keyboard::RestoreLighting();
 	return true;
@@ -256,7 +300,7 @@ bool LogiLedStopEffects()
 	return true;
 }
 
-bool LogiLedSetLightingFromBitmap(char bitmap [])
+bool LogiLedSetLightingFromBitmap(unsigned char bitmap[])
 {
 	CLogger::OutputLog_s("LogiLedSetLightingFromBitmap called", LogLevel::Information);
 
@@ -280,7 +324,7 @@ bool LogiLedSetLightingFromBitmap(char bitmap [])
 
 bool LogiLedSetLightingForKeyWithScanCode(int keyCode, int redPercentage, int greenPercentage, int bluePercentage)
 {
-	CLogger::OutputLog("LogiLedSetLightingForKeyWithScanCode called [Key: %i] (%i %i %i)", LogLevel::Information, keyCode, redPercentage, greenPercentage, bluePercentage );
+	CLogger::OutputLog("LogiLedSetLightingForKeyWithScanCode called [Key: %i] (%i %i %i)", LogLevel::Information, keyCode, redPercentage, greenPercentage, bluePercentage);
 
 	return true;
 }
@@ -306,11 +350,11 @@ bool LogiLedSetLightingForKeyWithKeyName(LogiLed::KeyName keyName, int redPercen
 	return true;
 }
 
-bool LogiLedShutdown()
+void LogiLedShutdown()
 {
 	CLogger::OutputLog_s("LogiLedShutdown called.", LogLevel::Information);
 
 	cleanup();
 
-	return true;
+	g_hasInitialised = false;
 }
