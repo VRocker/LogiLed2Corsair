@@ -3,6 +3,8 @@ LIBRARY LogiLed2Corsair.dll
 EXPORTS
 	
 	LogiLedInit
+	LogiLedGetSdkVersion
+	LogiLedSetTargetDevice
 	LogiLedSaveCurrentLighting
 	LogiLedSetLighting
 	LogiLedRestoreLighting
