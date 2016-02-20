@@ -1,0 +1,8 @@
+Installation
+
+* Copy the LogitechLED.dll to your GTAV directory.
+* Copy the CUESDK.x64_2013.dll to your GTAV directory
+* Edit RegistryPatch.reg and insert the path to your GTAV directory INCLUDING LogitechLED.dll (e.g. F:\\Steam\\steamapps\\common\\Grand Theft Auto V\\LogitechLed.dll)
+* (Note: The path to the DLL needs to contain double backslashes else it won't work)
+* Run RegistryPatch.reg
+* Play the game and party

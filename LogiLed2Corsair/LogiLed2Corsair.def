@@ -10,10 +10,15 @@ EXPORTS
 	LogiLedRestoreLighting
 	LogiLedFlashLighting
 	LogiLedPulseLighting
+	LogiLedStopEffects
 	LogiLedSetLightingFromBitmap
 	LogiLedSetLightingForKeyWithScanCode
 	LogiLedSetLightingForKeyWithHidCode
 	LogiLedSetLightingForKeyWithQuartzCode
 	LogiLedSetLightingForKeyWithKeyName
-	LogiLedStopEffects
+	LogiLedSaveLightingForKey
+	LogiLedRestoreLightingForKey
+	LogiLedFlashSingleKey
+	LogiLedPulseSingleKey
+	LogiLedStopEffectsOnKey
 	LogiLedShutdown

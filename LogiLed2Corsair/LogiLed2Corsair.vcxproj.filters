@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="CUESDK">
+      <UniqueIdentifier>{430d6cba-ec20-4234-85df-c5dec36e9d23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -23,6 +26,15 @@
     </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CUESDK\include\CorsairLedIdEnum.h">
+      <Filter>CUESDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CUESDK\include\CUESDK.h">
+      <Filter>CUESDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CUESDK\include\CUESDKGlobal.h">
+      <Filter>CUESDK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
