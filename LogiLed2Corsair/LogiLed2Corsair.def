@@ -18,6 +18,7 @@ EXPORTS
 	LogiLedSetLightingForKeyWithKeyName
 	LogiLedSaveLightingForKey
 	LogiLedRestoreLightingForKey
+	LogiLedExcludeKeysFromBitmap
 	LogiLedFlashSingleKey
 	LogiLedPulseSingleKey
 	LogiLedStopEffectsOnKey

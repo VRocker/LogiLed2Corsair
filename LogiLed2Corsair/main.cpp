@@ -366,8 +366,8 @@ bool LogiLedGetSdkVersion(int *majorNum, int *minorNum, int *buildNum)
 
 	// Mimic the SDK version
 	*majorNum = 8;
-	*minorNum = 75;
-	*buildNum = 30;
+	*minorNum = 87;
+	*buildNum = 116;
 
 	return true;
 }
@@ -500,6 +500,13 @@ bool LogiLedSaveLightingForKey(LogiLed::KeyName keyName)
 bool LogiLedRestoreLightingForKey(LogiLed::KeyName keyName)
 {
 	CLogger::OutputLog("LogiLedRestoreLightingForKey called [Key: %i]", LogLevel::Debug, keyName);
+
+	return true;
+}
+
+bool LogiLedExcludeKeysFromBitmap(LogiLed::KeyName *keyList, int listCount)
+{
+	CLogger::OutputLog("LogiLedExcludeKeysFromBitmap called [Count: %i]", LogLevel::Debug, listCount);
 
 	return true;
 }
