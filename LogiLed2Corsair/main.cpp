@@ -336,6 +336,7 @@ bool LogiLedInit()
 					coloursVector.push_back(CorsairLedColor{ ledId, 0, 0, 0 });
 				}
 			} break;
+
 			case CDT_Keyboard: 
 			{
 				auto ledPositions = CorsairGetLedPositions();
@@ -350,6 +351,13 @@ bool LogiLedInit()
 			{
 				coloursVector.push_back(CorsairLedColor{ CLH_LeftLogo, 0, 0, 0 });
 				coloursVector.push_back(CorsairLedColor{ CLH_RightLogo, 0, 0, 0 });
+			} break;
+
+			case CDT_MouseMat: {
+				for (auto i = 0; i < 15; i++) {
+					auto ledId = static_cast<CorsairLedId>(CLMM_Zone1 + i);
+					coloursVector.push_back(CorsairLedColor{ ledId, 0, 0, 0 });
+				}
 			} break;
 			}
 		}
